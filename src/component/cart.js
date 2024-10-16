@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Pagination from './Pagination'; // Adjust the import path as necessary
 
 function Cart() {
   const [posts, setPosts] = useState([]);
@@ -28,42 +29,39 @@ function Cart() {
   };
 
   const totalPages = Math.ceil(posts.length / postsPerPage);
-  const getPaginationGroup = () => {
-    const startPage = Math.max(1, currentPage - 1);
-    return Array.from({ length: Math.min(3, totalPages - startPage + 1) }, (_, i) => startPage + i);
-  };
 
   if (loading) return <h2>Loading...</h2>;
 
-  const today = new Date().toLocaleString('en-US', { month: 'long', day: 'numeric', timeZoneName: 'short' });
   const capitalizeFirstLetter = (str) => str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : '';
+  const today = new Date().toLocaleString('en-US', { month: 'long', day: 'numeric', timeZoneName: 'short' });
 
   return (
     <div>
-      <div className="posts-container">
+      <div className="w-full flex flex-wrap justify-center p-2.5 px-5">
         {getCurrentPosts().map((post, index) => (
-          <div key={post.id} className="cart">
-            <button onClick={() => removeCard(index)} className="remove-btn">X</button>
-            <h3 className="post-title">{post.title.length > 19 ? `${capitalizeFirstLetter(post.title.substring(0, 19))}...` : capitalizeFirstLetter(post.title)}</h3>
-            <p className="post-body">{post.body.length > 40 ? `${capitalizeFirstLetter(post.body.substring(0, 40))}...` : capitalizeFirstLetter(post.body)}</p>
-            <p className="post-date">{today}</p>
-            <img src="https://img.freepik.com/premium-photo/stylish-man-flat-vector-profile-picture-ai-generated_606187-310.jpg" className='mb-2' />
+          <div key={post.id} className="bg-white rounded-lg shadow-md m-2 p-2 w-56 text-left transition-transform duration-200 flex flex-col hover:scale-105">
+            <button 
+  onClick={() => removeCard(index)} 
+  aria-label="Remove post" 
+  className="text-red-500 border-none rounded-md cursor-pointer absolute top-2 right-2 text-xl transition-all duration-300 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-blue-600"
+>
+  X
+</button>
+
+            <h3 className="mt-2.5 text-base font-roboto font-semibold">{post.title.length > 19 ? `${capitalizeFirstLetter(post.title.substring(0, 19))}...` : capitalizeFirstLetter(post.title)}</h3>
+            <p className="text-sm text-gray-800 font-roboto font-medium leading-4">{post.body.length > 40 ? `${capitalizeFirstLetter(post.body.substring(0, 40))}...` : capitalizeFirstLetter(post.body)}</p>
+            <p className="text-sm opacity-70">{today}</p>
+            <img src="https://img.freepik.com/premium-photo/stylish-man-flat-vector-profile-picture-ai-generated_606187-310.jpg" alt="#" className='mb-2 w-full h-28 rounded-lg' />
           </div>
         ))}
       </div>
 
       {/* Pagination Controls */}
-      <div className="pagination">
-        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-        </svg></button>
-        {getPaginationGroup().map((pageNumber) => (
-          <button key={pageNumber} onClick={() => handlePageChange(pageNumber)} className={currentPage === pageNumber ? 'active' : ''}>{pageNumber}</button>
-        ))}
-        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-        </svg></button>
-      </div>
+      <Pagination 
+        currentPage={currentPage} 
+        totalPages={totalPages} 
+        onPageChange={handlePageChange} 
+      />
     </div>
   );
 }

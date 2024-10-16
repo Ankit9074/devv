@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Pagination from './Pagination';
 
 function Cart() {
   const [posts, setPosts] = useState([]);
@@ -19,24 +20,21 @@ function Cart() {
       });
   }, []);
 
+
   const getCurrentPosts = () => {
     return posts.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
   };
-
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
   const removeCard = (index) => {
     const updatedPosts = posts.filter((_, postIndex) => postIndex !== ((currentPage - 1) * postsPerPage + index));
     setPosts(updatedPosts);
   };
 
   const totalPages = Math.ceil(posts.length / postsPerPage);
-  const getPaginationGroup = () => {
-    const startPage = Math.max(1, currentPage - 1);
-    return Array.from({ length: Math.min(3, totalPages - startPage + 1) }, (_, i) => startPage + i);
-  };
+  
+ 
 
   if (loading) return <h2>Loading...</h2>;
 
@@ -46,32 +44,35 @@ function Cart() {
 
   return (
     <div>
-      <div className="post-container">
-        {getCurrentPosts().map((post, index) => (
+      <div className="min-w-[900px] mx-5 my-4 flex flex-col gap-1">
+  {getCurrentPosts().map((post, index) => (
+    <div key={post.id} className="bg-white rounded-[12px] shadow-md flex items-start p-2 relative">
+      <img 
+        src="https://img.freepik.com/premium-photo/stylish-man-flat-vector-profile-picture-ai-generated_606187-310.jpg" 
+        className='mb-2 w-[50px] h-[50px] rounded-full mr-[15px]' 
+        alt="Profile" 
+      />
+    <div className='dataContainer flex flex-col justify-start'>
+  <h3 className="m-0 text-[14px] font-semibold text-gray-800">
+    {post.title.length > 50 ? `${capitalizeFirstLetter(post.title.substring(0, 50))}...` : capitalizeFirstLetter(post.title)}
+  </h3>
+  <p className="my-0.5 text-[12px] text-gray-600">
+    {post.body.length > 120 ? `${capitalizeFirstLetter(post.body.substring(0, 120))}...` : capitalizeFirstLetter(post.body)}
+  </p>
+  <p className="text-[11px] text-gray-500">{today}</p>
+</div>
+      <button onClick={() => removeCard(index)} className="remove-btn">X</button>
+    </div>
+  ))}
+</div>
 
-          <div key={post.id} className="cardList">
-            <img src="https://img.freepik.com/premium-photo/stylish-man-flat-vector-profile-picture-ai-generated_606187-310.jpg" className='mb-2' alt="Profile" />
-            <div className='dataContainer'> <h3 className="cardList-title">{post.title.length > 50 ? `${capitalizeFirstLetter(post.title.substring(0, 50))}...` : capitalizeFirstLetter(post.title)}</h3>
-              <p className="cardList-body">{post.body.length > 120 ? `${capitalizeFirstLetter(post.body.substring(0, 120))}...` : capitalizeFirstLetter(post.body)}</p>
-              <p className="cardlist-date">{today}</p>
-
-            </div>
-            <button onClick={() => removeCard(index)} className="remove-btn">X</button>
-          </div>
-        ))}
-      </div>
       {/* Pagination Controls */}
-      <div className="pagination">
-        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-        </svg></button>
-        {getPaginationGroup().map((pageNumber) => (
-          <button key={pageNumber} onClick={() => handlePageChange(pageNumber)} className={currentPage === pageNumber ? 'active' : ''}>{pageNumber}</button>
-        ))}
-        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-        </svg></button>
-      </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
+
     </div>
   );
 }

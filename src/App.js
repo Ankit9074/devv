@@ -1,25 +1,9 @@
 import './App.css';
-import Cart from './component/cart';
-import CardList from './component/cardList'
-import SideBar from './component/SideBar';
-import { useState } from 'react';
+import Home from './component/Home';
 function App() {
-
-  const [view, setView] = useState('cardList');
-  console.log("view --- ", view);
-
   return (
     <div className="App">
-      <div className='sideBar shadow  flex'>
-        <SideBar setView={setView} view={view} />
-      </div>
-      <div className='cardContainer pt-50 '>
-        {
-          view == "cart"
-            ? <Cart />
-            : <CardList />
-        }
-      </div>
+      <Home />
     </div>
   );
 }

@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import Feedback from './Feedback';
-
 const Toggle = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
-
   const toggleForm = () => setIsFormOpen((prev) => !prev);
-
   return (
     <div className="bg-white p-4 rounded-xl shadow-md text-center space-y-3">
       <p className=" text-xl text-gray-700 font-bold">Have Feedback?</p>

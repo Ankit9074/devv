@@ -2,15 +2,6 @@ import React, { useState } from 'react';
 import Toggle from './Toggle';
 
 function Feedback({ onClose }) {
-  const [formData, setFormData] = useState({
-    name: '',
-    lastname: '',
-    address: '',
-    country: '',
-    email: '',
-    phone: ''
-  });
-
   const [isToggled, setIsToggled] = useState(false);
 
 
@@ -19,7 +10,7 @@ function Feedback({ onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 flex widthss bg-[#e3ebf0]  z-10 shadow-lg">
+    <div className="fixed inset-0 flex w-[900px] rounded-[15px] bg-[#e3ebf0]  z-10 shadow-lg">
       <div className="bg-[#e3ebf0]  rounded-lg p-6 relative h-full left ">
         <button onClick={onClose} className="absolute top-4 left-4 text-gray-600">
           <div className="flex flex-row items-center space-x-3 bg-white p-3 rounded-xl shadow-md mb-5">
@@ -103,11 +94,8 @@ function Feedback({ onClose }) {
         </div>
         <div className="flex flex-col mt-1">
           <button className='mt-1 border-2 rounded-lg p-1 ml-4 w-64 bg-[#90e4c2]'>Submite Feedback</button>
-
         </div>
       </div>
-
-
     </div>
   );
 }
